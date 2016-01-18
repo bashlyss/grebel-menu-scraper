@@ -1,7 +1,7 @@
 import requests
 import re
 from dateutil import parser
-from datetime import datetime
+from datetime import date, datetime, timedelta
 
 # separate by | if adding more
 search_flags = re.DOTALL | re.MULTILINE
@@ -25,14 +25,18 @@ def get_date(date_range):
     [start_str, end_str] = day_str.split('-')
 
     # Use the default to parse in the context of the appropriate year (important for leap years)
-    start = parser.parse(start_str, fuzzy=True, default=datetime(year, 1, 1))
+    start = parser.parse(start_str, fuzzy=True, default=date(year, 1, 1))
     if re.search(MONTH, end_str):
-        end = parser.parse(end_str, fuzzy=True, default=datetime(year, 1, 1))
+        end = parser.parse(end_str, fuzzy=True, default=date(year, 1, 1))
     else:
         end_day = int(re.search(r'\d+', end_str).group(0))
-        end = datetime(year, start.month, end_day)
+        end = date(year, start.month, end_day)
 
     return start, end
+
+def daterange(start_date, end_date):
+    for n in range(int((end_date - start_date).days)+1):
+        yield start_date + timedelta(n), n
 
 def scrape_menu():
     url = "https://uwaterloo.ca/grebel/current-students/general-information/kitchen/weekly-menu"
@@ -42,7 +46,7 @@ def scrape_menu():
 
     raw_weekly_list = regex.findall(raw)
 
-    all_weeks = {}
+    daily_menu = {}
     for week in raw_weekly_list:
         # because this is scraped, the format of the spacing on this string is inconsistent
         # approximately resembles "January 4th - January 10th/2016" most of the time
@@ -56,6 +60,14 @@ def scrape_menu():
             cols = map(clean_col, cols)
 
             cleaned_table.append(cols)
-        all_weeks[dates] = cleaned_table
 
-    return all_weeks
+        weekly_menu = zip(*cleaned_table)
+        for day, index in daterange(dates[0], dates[1]):
+            daily_menu[day] = weekly_menu[index + 1]
+
+    return daily_menu
+
+def get_todays_menu(menu_dict):
+    return menu_dict[date.today()]
+
+result = scrape_menu()
