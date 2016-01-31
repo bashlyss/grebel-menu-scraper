@@ -5,6 +5,7 @@ from datetime import date, datetime, timedelta
 
 # separate by | if adding more
 search_flags = re.DOTALL | re.MULTILINE
+MEAL_ORDER = ['day','breakfast','lunch','lunch_vegetarian','supper','supper_vegetarian','snack']
 
 def clean_col(col_text):
     clean_whitespace = " ".join(col_text.split()).strip()
@@ -47,6 +48,7 @@ def scrape_menu():
     raw_weekly_list = regex.findall(raw)
 
     daily_menu = {}
+    weekly_menu_by_meal = {}
     for week in raw_weekly_list:
         # because this is scraped, the format of the spacing on this string is inconsistent
         # approximately resembles "January 4th - January 10th/2016" most of the time
@@ -61,13 +63,24 @@ def scrape_menu():
 
             cleaned_table.append(cols)
 
+        weekly_menu_by_meal[dates] = {}
+        for meal in zip(MEAL_ORDER, cleaned_table):
+            weekly_menu_by_meal[dates][meal[0]] = meal[1][1:]
+
         weekly_menu = zip(*cleaned_table)
         for day, index in daterange(dates[0], dates[1]):
             daily_menu[day] = weekly_menu[index + 1]
 
-    return daily_menu
+    return daily_menu, weekly_menu_by_meal
+
+def convert_daily_to_dict(menu_day):
+    daily_dict = {}
+    for meal in zip(menu_day, MEAL_ORDER):
+        daily_dict[meal[1]] = meal[0]
+    return daily_dict
 
 def get_todays_menu(menu_dict):
     return menu_dict[date.today()]
 
 result = scrape_menu()
+today = get_todays_menu(result[0])
