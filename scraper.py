@@ -61,7 +61,7 @@ def daterange(start_date, end_date):
 
 def scrape_menu():
     url = "https://uwaterloo.ca/grebel/current-students/general-information/kitchen/weekly-menu"
-    single_week_regex = ".*?(<p>.*?</p>)\n\n(<table width=\"...\">.*?</table>)"
+    single_week_regex = ".*?(<p>.*?</p>)(\n)*(<table width=\"...\">.*?</table>)"
     raw = requests.get(url).text
     regex = re.compile(single_week_regex, search_flags)
 
@@ -75,7 +75,7 @@ def scrape_menu():
         raw_dates = re.search("<p>.*<strong>(.*?)</strong>.*</p>$", week[0]).group(1).strip()
         dates = get_date(raw_dates)
 
-        rows = re.findall("<tr>(.*?)</tr>", week[1], search_flags)
+        rows = re.findall("<tr>(.*?)</tr>", week[2], search_flags)
         cleaned_table = []
         for row in rows:
             cols = re.findall("<t[hd].*?>(.*?)</t[hd]>", row, search_flags)
@@ -102,5 +102,5 @@ def convert_daily_to_dict(menu_day):
 def get_todays_menu(menu_dict):
     return menu_dict[date.today()]
 
-result = scrape_menu()
-today = get_todays_menu(result[0])
+menu, weekly_meals = scrape_menu()
+today = get_todays_menu(menu)

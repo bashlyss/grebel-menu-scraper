@@ -2,7 +2,8 @@ from os import path
 from datetime import datetime, time
 from icalendar import Calendar, Event
 from pytz import timezone
-from scraper import result as menu
+from scraper import menu
+
 
 class UUIDMaker(object):
     """
@@ -18,6 +19,7 @@ class UUIDMaker(object):
         self.counter += 1
         return uid
 
+
 def get_calendar(fname, title, uuid_maker):
     if path.exists(fname):
         with open(fname, 'r') as cal_file:
@@ -30,12 +32,15 @@ def get_calendar(fname, title, uuid_maker):
     cal.add('uid', uuid_maker.get())
     return cal
 
+
 def make_datetime(date_part, time_part):
     time_part = time_part.replace(tzinfo=timezone('America/New_York'))
     return datetime.combine(date_part, time_part)
 
+
 def stamp(component):
     component.add('dtstamp', datetime.utcnow())
+
 
 def make_event(cal, uuid_maker):
     """ Creates a new event in `cal` """
@@ -45,10 +50,12 @@ def make_event(cal, uuid_maker):
     cal.add_component(e)
     return e
 
+
 def set_times(e, times):
     """ Set the start and end times of event `e` using the tuple of datetimes `times` """
     e.add('dtstart', times[0])
     e.add('dtend', times[1])
+
 
 def main():
     # pylint: disable=no-member
@@ -71,7 +78,8 @@ def main():
             times = {
                 'breakfast': (time(8, 0, 0), time(11, 0, 0)),
                 'lunch': (time(12, 0, 0), time(13, 30, 0)),
-                'dinner': (time(17, 0, 0), time(18, 0, 0))
+                'dinner': (time(17, 0, 0), time(18, 0, 0)),
+                'snack': (time(21, 0, 0), time(22, 0, 0))
             }
         else:
             times = {
@@ -81,9 +89,9 @@ def main():
                 'snack': (time(22, 10, 0), time(22, 30, 0))
             }
 
-        for key in times.keys():
-            start, end = times[key]
-            times[key] = (make_datetime(key, start), make_datetime(key, end))
+        for meal_key in times.keys():
+            start, end = times[meal_key]
+            times[meal_key] = (make_datetime(key, start), make_datetime(key, end))
 
         e = make_event(cal, uuid_maker)
         set_times(e, times['breakfast'])
@@ -117,6 +125,7 @@ def main():
 
     with open(SNACK_MENU_FILE, 'w') as f:
         f.write(snack_cal.to_ical(True))
+
 
 if __name__ == '__main__':
     main()
