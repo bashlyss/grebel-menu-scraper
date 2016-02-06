@@ -1,0 +1,3 @@
+icalendar==3.9.*
+pytz==2015.7
+requests==2.9.*

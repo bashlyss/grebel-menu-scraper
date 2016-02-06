@@ -1,7 +1,27 @@
-import requests
 import re
+from HTMLParser import HTMLParser
+from datetime import date, timedelta
+
+import requests
 from dateutil import parser
-from datetime import date, datetime, timedelta
+
+class MLStripper(HTMLParser):
+
+    def __init__(self):
+        HTMLParser.__init__(self)
+        self.reset()
+        self.fed = []
+
+    def handle_data(self, d):
+        self.fed.append(d)
+
+    def get_data(self):
+        return ''.join(self.fed)
+
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
 
 # separate by | if adding more
 search_flags = re.DOTALL | re.MULTILINE
@@ -9,11 +29,11 @@ MEAL_ORDER = ['day','breakfast','lunch','lunch_vegetarian','supper','supper_vege
 
 def clean_col(col_text):
     clean_whitespace = " ".join(col_text.split()).strip()
-    clean_multi = re.subn("</p> <p>", ",", clean_whitespace, flags=search_flags)[0]
-    clean_p = re.subn("</?p>", "", clean_multi, flags=search_flags)[0]
-    clean_br = re.subn("<br ?/?>", "", clean_p, flags=search_flags)[0]
-    clean_strong = re.subn("</?strong>", "", clean_br, flags=search_flags)[0]
-    return clean_strong
+    clean_multi = re.subn("</p> <p>", ", ", clean_whitespace, flags=search_flags)[0]
+
+    # TODO strong, em and texting ending in an exclamation mark indicate titles
+    # we should probably deal with those differently
+    return strip_tags(clean_multi)
 
 def get_date(date_range):
     MONTH = 'January|February|March|April|May|June|July|August|September|October|November|December'
