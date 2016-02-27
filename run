@@ -1,4 +1,0 @@
-#!/bin/bash
-# This script should be maintained to run a full execution of the program
-# Add further details if required.
-python writer.py
