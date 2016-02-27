@@ -1,5 +1,5 @@
 import re
-from HTMLParser import HTMLParser
+from html.parser import HTMLParser
 from datetime import date, timedelta
 
 import requests
@@ -79,7 +79,7 @@ def scrape_menu():
         cleaned_table = []
         for row in rows:
             cols = re.findall("<t[hd].*?>(.*?)</t[hd]>", row, search_flags)
-            cols = map(clean_col, cols)
+            cols = list(map(clean_col, cols))
 
             cleaned_table.append(cols)
 
@@ -87,7 +87,7 @@ def scrape_menu():
         for meal in zip(MEAL_ORDER, cleaned_table):
             weekly_menu_by_meal[dates][meal[0]] = meal[1][1:]
 
-        weekly_menu = zip(*cleaned_table)
+        weekly_menu = list(zip(*cleaned_table))
         for day, index in daterange(dates[0], dates[1]):
             daily_menu[day] = weekly_menu[index + 1]
 
