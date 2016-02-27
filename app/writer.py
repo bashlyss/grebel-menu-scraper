@@ -2,7 +2,10 @@ from os import path
 from datetime import datetime, time
 from icalendar import Calendar, Event
 from pytz import timezone
-from scraper import menu
+
+from .scraper import menu
+
+STATIC_DIR = path.join(path.dirname(__file__), 'static')
 
 
 class UUIDMaker(object):
@@ -21,8 +24,9 @@ class UUIDMaker(object):
 
 
 def get_calendar(fname, title, uuid_maker):
-    if path.exists(fname):
-        with open(fname, 'r') as cal_file:
+    cal_path = path.join(STATIC_DIR, fname)
+    if path.exists(cal_path):
+        with open(cal_path, 'rb') as cal_file:
             return Calendar.from_ical(cal_file.read())
 
     cal = Calendar()
@@ -32,6 +36,11 @@ def get_calendar(fname, title, uuid_maker):
     cal.add('uid', uuid_maker.get())
     return cal
 
+def write_calendar(fname, cal):
+    cal_path = path.join(STATIC_DIR, fname)
+
+    with open(cal_path, 'wb') as cal_file:
+        cal_file.write(cal.to_ical(True))
 
 def make_datetime(date_part, time_part):
     time_part = time_part.replace(tzinfo=timezone('America/New_York'))
@@ -57,7 +66,7 @@ def set_times(e, times):
     e.add('dtend', times[1])
 
 
-def main():
+def update_calendars():
     # pylint: disable=no-member
 
     uuid_maker = UUIDMaker()
@@ -117,15 +126,6 @@ def main():
         set_times(e, times['snack'])
         e.add('summary', snack)
 
-    with open(MENU_FILE, 'w') as f:
-        f.write(cal.to_ical(True))
-
-    with open(VEG_MENU_FILE, 'w') as f:
-        f.write(veg_cal.to_ical(True))
-
-    with open(SNACK_MENU_FILE, 'w') as f:
-        f.write(snack_cal.to_ical(True))
-
-
-if __name__ == '__main__':
-    main()
+    write_calendar(MENU_FILE, cal)
+    write_calendar(VEG_MENU_FILE, veg_cal)
+    write_calendar(SNACK_MENU_FILE, snack_cal)
