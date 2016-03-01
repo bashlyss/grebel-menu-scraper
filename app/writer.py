@@ -51,11 +51,13 @@ def stamp(component):
     component.add('dtstamp', datetime.utcnow())
 
 
-def make_event(cal, uuid_maker):
+def make_event(cal, uuid_maker, times, menu_item):
     """ Creates a new event in `cal` """
     e = Event()
     e.add('uid', uuid_maker.get())
     stamp(e)
+    set_times(e, times)
+    e.add('summary', menu_item)
     cal.add_component(e)
     return e
 
@@ -102,29 +104,18 @@ def update_calendars():
             start, end = times[meal_key]
             times[meal_key] = (make_datetime(key, start), make_datetime(key, end))
 
-        e = make_event(cal, uuid_maker)
-        set_times(e, times['breakfast'])
-        e.add('summary', breakfast or 'Cold Breakfast')
+        # Breakfast always blank on weekends, so we label it what it actually is, cold breakfast
+        breakfast = breakfast or 'Cold Breakfast'
 
-        e = make_event(cal, uuid_maker)
-        set_times(e, times['lunch'])
-        e.add('summary', lunch)
+        make_event(cal, uuid_maker, times['breakfast'], breakfast)
 
-        e = make_event(veg_cal, uuid_maker)
-        set_times(e, times['lunch'])
-        e.add('summary', lunch_veg)
+        make_event(cal, uuid_maker, times['lunch'], lunch)
+        make_event(veg_cal, uuid_maker, times['lunch'], lunch_veg)
 
-        e = make_event(cal, uuid_maker)
-        set_times(e, times['dinner'])
-        e.add('summary', dinner)
+        make_event(cal, uuid_maker, times['dinner'], dinner)
+        make_event(veg_cal, uuid_maker, times['dinner'], dinner_veg)
 
-        e = make_event(veg_cal, uuid_maker)
-        set_times(e, times['dinner'])
-        e.add('summary', dinner_veg)
-
-        e = make_event(snack_cal, uuid_maker)
-        set_times(e, times['snack'])
-        e.add('summary', snack)
+        make_event(snack_cal, uuid_maker, times['snack'], snack)
 
     write_calendar(MENU_FILE, cal)
     write_calendar(VEG_MENU_FILE, veg_cal)
