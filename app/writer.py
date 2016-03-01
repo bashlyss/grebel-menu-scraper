@@ -98,7 +98,8 @@ def update_calendars():
     for key in sorted_menu_keys:
         day, breakfast, lunch, lunch_veg, dinner, dinner_veg, snack = menu[key]
 
-        # Can't check breakfast since that's always blank on weekends
+        # If the lunch menu item is empty then this whole day will be blank.
+        # Breakfast is always blank on weekends so checking that isn't useful.
         if not lunch:
             continue
 
@@ -125,6 +126,9 @@ def update_calendars():
         breakfast = breakfast or 'Cold Breakfast'
 
         make_event(cal, uuid_maker, times['breakfast'], breakfast)
+
+        # Also add breakfast to the vegetarian in case they don't want to have to look at both calendars
+        make_event(veg_cal, uuid_maker, times['breakfast'], breakfast)
 
         make_event(cal, uuid_maker, times['lunch'], lunch)
         make_event(veg_cal, uuid_maker, times['lunch'], lunch_veg)
