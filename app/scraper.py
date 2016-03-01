@@ -11,29 +11,69 @@ class MLStripper(HTMLParser):
         HTMLParser.__init__(self)
         self.reset()
         self.fed = []
+        self.chunk = ''
+        self.title = None
+        self.multiline_tags = ['strong', 'em', 'p']
+        self.chunking = False
+        self.start_chunk = None
+
+    def handle_starttag(self, t, attrs):
+        if t in self.multiline_tags:
+            self.chunking = True
+            self.start_chunk = t
+
+    def handle_endtag(self, t):
+        if t not in self.multiline_tags or t != self.start_chunk:
+            return
+
+        if t == 'strong' or t == 'em':
+            self.title = self.chunk or None
+        else:
+            self.fed.append(self.chunk)
+
+        self.chunk = ''
+        self.chunking = False
 
     def handle_data(self, d):
-        self.fed.append(d)
+        d = d.strip()
+        if self.chunking:
+            self.chunk += d
+        else:
+            self.fed.append(d)
 
     def get_data(self):
-        return ''.join(self.fed)
+        return self.title, self.fed
 
 def strip_tags(html):
     s = MLStripper()
     s.feed(html)
-    return s.get_data()
+    data = []
+    title, parsed_data = s.get_data()
+    for d in parsed_data:
+        if not d:
+            continue
+
+        if not data:
+            data.append(d)
+            continue
+
+        last = data[-1]
+        joining_words = ['with', 'and', 'on', 'on a']
+        if any(map(last.endswith, joining_words)) or \
+           any(map(d.startswith, joining_words)):
+            data[-1] += ' ' + d
+        else:
+            data.append(d)
+
+    menu_item = ', '.join(data)
+    if title is not None:
+        return '{}: {}'.format(title, menu_item)
+    else:
+        return menu_item
 
 # separate by | if adding more
 search_flags = re.DOTALL | re.MULTILINE
 MEAL_ORDER = ['day','breakfast','lunch','lunch_vegetarian','supper','supper_vegetarian','snack']
-
-def clean_col(col_text):
-    clean_whitespace = " ".join(col_text.split()).strip()
-    clean_multi = re.subn("</p> <p>", ", ", clean_whitespace, flags=search_flags)[0]
-
-    # TODO strong, em and texting ending in an exclamation mark indicate titles
-    # we should probably deal with those differently
-    return strip_tags(clean_multi)
 
 def get_date(date_range):
     MONTH = 'January|February|March|April|May|June|July|August|September|October|November|December'
@@ -78,7 +118,7 @@ def scrape_menu():
         cleaned_table = []
         for row in rows:
             cols = re.findall("<t[hd].*?>(.*?)</t[hd]>", row, search_flags)
-            cols = list(map(clean_col, cols))
+            cols = list(map(strip_tags, cols))
 
             cleaned_table.append(cols)
 
