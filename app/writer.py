@@ -1,5 +1,7 @@
 from os import path
 from datetime import datetime, time
+from itertools import takewhile
+
 from icalendar import Calendar, Event
 from pytz import timezone
 
@@ -24,6 +26,7 @@ class UUIDMaker(object):
 
 
 def get_calendar(fname, title, uuid_maker):
+    """ Either get the calendar file `fname` or create it """
     cal_path = path.join(STATIC_DIR, fname)
     if path.exists(cal_path):
         with open(cal_path, 'rb') as cal_file:
@@ -48,6 +51,7 @@ def make_datetime(date_part, time_part):
 
 
 def stamp(component):
+    """ Stamps `component` with a 'dtstamp' attribute """
     component.add('dtstamp', datetime.utcnow())
 
 
@@ -65,6 +69,9 @@ def set_times(e, times):
     e.add('dtstart', times[0])
     e.add('dtend', times[1])
 
+def remove_events_on_menu(cal, menu_start):
+    """ Removes any events from `cal` that have been "rescraped" """
+    cal.subcomponents[:] = takewhile(lambda e: e['DTSTART'].dt < menu_start, cal.subcomponents)
 
 def update_calendars():
     # pylint: disable=no-member
@@ -79,9 +86,19 @@ def update_calendars():
     veg_cal = get_calendar(VEG_MENU_FILE, 'Grebel Weekly Vegetarian Menu', uuid_maker)
     snack_cal = get_calendar(SNACK_MENU_FILE, 'Grebel Weekly Snack Menu', uuid_maker)
 
-    # TODO ignore events that have already been input to the calendar
-    for key in sorted(menu.keys()):
+    sorted_menu_keys = sorted(menu.keys())
+    menu_start = make_datetime(sorted_menu_keys[0], time(0, 0, 0))
+
+    remove_events_on_menu(cal, menu_start)
+    remove_events_on_menu(veg_cal, menu_start)
+    remove_events_on_menu(snack_cal, menu_start)
+
+    for key in sorted_menu_keys:
         day, breakfast, lunch, lunch_veg, dinner, dinner_veg, snack = menu[key]
+
+        # Can't check breakfast since that's always blank on weekends
+        if not lunch:
+            continue
 
         if day in ['Sat', 'Sun']:
             times = {
@@ -122,9 +139,10 @@ def update_calendars():
         set_times(e, times['dinner'])
         e.add('summary', dinner_veg)
 
-        e = make_event(snack_cal, uuid_maker)
-        set_times(e, times['snack'])
-        e.add('summary', snack)
+        if snack:
+            e = make_event(snack_cal, uuid_maker)
+            set_times(e, times['snack'])
+            e.add('summary', snack)
 
     write_calendar(MENU_FILE, cal)
     write_calendar(VEG_MENU_FILE, veg_cal)
