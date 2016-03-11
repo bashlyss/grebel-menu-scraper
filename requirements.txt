@@ -2,3 +2,5 @@ icalendar==3.9.*
 pytz==2015.7
 requests==2.9.*
 flask==0.10.*
+sqlalchemy==1.0.*
+flask-sqlalchemy==2.1
