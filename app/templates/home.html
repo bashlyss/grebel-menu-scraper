@@ -1,0 +1,7 @@
+<p>It works!</p>
+
+<p>Yeah this is a terrible landing page, but so what</p>
+
+{% if current_user.is_authenticated %}
+Hi {{ current_user.name }}!
+{% endif %}

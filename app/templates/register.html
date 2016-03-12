@@ -1,0 +1,6 @@
+<form method="POST" action="/register">
+    {{ form.csrf_token }}
+    {{ form.name.label }} {{ form.name }}
+    {{ form.email.label }} {{ form.email }}
+    {{ form.submit }}
+</form>
