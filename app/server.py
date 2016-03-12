@@ -12,7 +12,6 @@ def refresh():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = forms.LoginForm()
-    flask.flash(form.validate_on_submit())
     if form.validate_on_submit():
         user = models.User.query.filter_by(email=form.email.data).first()
         if user is None:
@@ -23,7 +22,7 @@ def login():
 
         next_url = flask.request.args.get('next')
         if not auth.next_is_valid(next_url):
-            return flask.abort(400)
+            return flask.abort(404)
 
         return flask.redirect(next_url or '/')
     return flask.render_template('login.html', form=form)
