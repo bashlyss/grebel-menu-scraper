@@ -1,0 +1,7 @@
+<form method="POST" action="/login">
+    {{ form.csrf_token }}
+    {{ form.email.label }} {{ form.email }}
+    {{ form.remember.label }} {{ form.remember }}
+    {{ form.submit }}
+</form>
+If you do not have any account please <a href="/register">sign up here</a>.

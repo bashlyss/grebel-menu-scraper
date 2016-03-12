@@ -4,3 +4,6 @@ requests==2.9.*
 flask==0.10.*
 sqlalchemy==1.0.*
 flask-sqlalchemy==2.1
+flask-login==0.3.*
+wtforms==2.1
+flask-wtf==0.12.*

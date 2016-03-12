@@ -4,3 +4,5 @@ bin
 include
 lib
 pip-selfcheck.json
+app.db
+*.pyc
