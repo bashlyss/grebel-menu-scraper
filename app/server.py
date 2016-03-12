@@ -1,8 +1,6 @@
-from flask import Flask
 
-from . import writer
+from app import app, writer
 
-app = Flask(__name__)
 
 @app.route('/refresh', methods=['POST'])
 def refresh():
