@@ -13,5 +13,5 @@ class RegistrationForm(Form):
         validators.Length(min=6, max=80),
         validators.Email('Please enter a valid email address')])
     name = StringField('Name', [validators.Length(min=1, max=80)])
-	recaptcha = RecaptchaField()
+    recaptcha = RecaptchaField()
     submit = SubmitField("Sign up")
