@@ -1,9 +1,9 @@
-icalendar==3.9.*
-pytz==2015.7
-requests==2.9.*
-flask==0.10.*
-sqlalchemy==1.0.*
-flask-sqlalchemy==2.1
-flask-login==0.3.*
-wtforms==2.1
-flask-wtf==0.12.*
+icalendar>=3.9, <3.10
+pytz>=2015.7, <2015.8
+requests>=2.9, <2.10
+flask>=0.10, <0.11
+sqlalchemy>=1.0,<1.1
+flask-sqlalchemy>=2.1,<2.2
+flask-login>=0.3, <0.4
+wtforms>=2.1, <2.2
+flask-wtf>=0.12, <0.13
