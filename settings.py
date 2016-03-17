@@ -1,3 +1,5 @@
+import os
+
 SQLALCHEMY_DATABASE_URI = 'sqlite:///app.db'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ECHO = False  # Log SQL statements
@@ -8,3 +10,9 @@ SECRET_KEY = 'This is a dummy string'
 
 RECAPTCHA_PUBLIC_KEY = ''
 RECAPTCHA_PRIVATE_KEY = ''
+
+# OAuth2
+GOOGLE = {
+    'consumer_key': os.environ.get('GOOGLE_CLIENT_ID'),
+    'consumer_secret': os.environ.get('GOOGLE_CLIENT_SECRET'),
+}

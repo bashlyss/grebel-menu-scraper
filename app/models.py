@@ -1,29 +1,31 @@
 from flask.ext.login import UserMixin
-from app import db
 
-class User(db.Model, UserMixin):
+from app import sa
+
+class User(sa.Model, UserMixin):
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
-    email = db.Column(db.String(80))
+    id = sa.Column(sa.Integer, primary_key=True)
+    name = sa.Column(sa.String(80))
+    email = sa.Column(sa.String(80), unique=True)
+    google_id = sa.Column(sa.String(25), unique=True, nullable=True)
 
-    preferences = db.relationship("FoodPreference", backref="user")
+    preferences = sa.relationship("FoodPreference", backref="user")
 
-    def __init__(self, name, email):
-        super(User, self).__init__()
+    def __init__(self, name, email, **kwargs):
+        super(User, self).__init__(**kwargs)
         self.name = name
         self.email = email
 
     def __repr__(self):
-       return "<User: {0} {1}>".format(self.id, self.email)
+        return "<User: {0} {1}>".format(self.id, self.email)
 
-class FoodPreference(db.Model):
+class FoodPreference(sa.Model):
     __tablename__ = 'food_preference'
 
-    id = db.Column(db.Integer, primary_key=True)
-    food = db.Column(db.String(80))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    id = sa.Column(sa.Integer, primary_key=True)
+    food = sa.Column(sa.String(80))
+    user_id = sa.Column(sa.Integer, sa.ForeignKey('users.id'))
 
     def __repr__(self):
-       return "<FoodPreference: {0} {1}>".format(self.id, self.food)
+        return "<FoodPreference: {0} {1}>".format(self.id, self.food)

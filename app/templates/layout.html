@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grebel Menu</title>
+  </head>
+  <body>
+    {% if current_user.is_authenticated %}
+    <header>
+      <form method="POST" action="{{ url_for('logout') }}">
+        <button type="submit">Log out</button>
+      </form>
+    </header>
+    {% endif %}
+
+    {% block body %}{% endblock %}
+  </body>
+</html>
