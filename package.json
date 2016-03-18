@@ -1,0 +1,22 @@
+{
+  "name": "grebel-menu-scraper",
+  "version": "0.0.1",
+  "description": "A scraper and menu alert system for the Conrad Grebel University College menu",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loewen-uwaterloo/grebel-menu-scraper.git"
+  },
+  "author": "Nik Klassen, James Loewen",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/loewen-uwaterloo/grebel-menu-scraper/issues"
+  },
+  "homepage": "https://github.com/loewen-uwaterloo/grebel-menu-scraper#readme",
+  "devDependencies": {
+    "node-sass": "^3.4.2"
+  }
+}

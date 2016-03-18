@@ -1,14 +1,30 @@
 {% extends 'layout.html' %}
 
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}" type="text/css" media="all">
+{% endblock %}
+
 {% block body %}
-<form method="POST" action="/login">
+<div id="login-prompt">
+  <form method="POST" action="/login">
     {{ form.csrf_token }}
-    {{ form.email.label }} {{ form.email }}
-    {{ form.remember.label }} {{ form.remember }}
-    {{ form.submit }}
-</form>
-If you do not have any account please <a href="/register">sign up here</a> or <br />
-<a href="{{ url_for('login_google') }}">
-  <img src="{{ url_for('static', filename='imgs/btn_google_signin_dark_normal_web.png') }}" title="Log in with Google">
-</a>
+    <div class="row">
+      {{ form.email.label }} {{ form.email }}
+    </div>
+    <div class="row">
+      <label>
+      {{ form.remember }}
+      <span class="label-text">{{ form.remember.label.text }}</span>
+      </label>
+    </div>
+    <div class="row">
+    {{ form.submit(class_='button-primary') }}
+    </div>
+  </form>
+  <p>If you do not have any account please<br />
+  <a href="/register">sign up here</a> or</p>
+  <a href="{{ url_for('login_google') }}">
+    <img src="{{ url_for('static', filename='imgs/btn_google_signin_dark_normal_web.png') }}" title="Log in with Google">
+  </a>
+</div>
 {% endblock body %}

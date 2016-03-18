@@ -41,7 +41,7 @@ def register():
 @app.route('/')
 @login_required
 def index():
-    return flask.render_template('home.html')
+    return flask.render_template('index.html')
 
 def set_calendar_headers(resp):
     if resp.headers['Content-Type'].startswith('text/calendar'):

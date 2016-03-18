@@ -1,0 +1,24 @@
+@import 'colors';
+@import 'globals';
+
+button {
+    background-color: white;
+}
+
+header {
+    @extend .z-depth-1;
+    height: 2.5em;
+    padding: 8px;
+    background-color: $teal;
+
+    > form {
+        float: right;
+    }
+}
+
+.container {
+    padding: 16px;
+    display: flex;
+    align-items: top;
+    justify-content: center;
+}

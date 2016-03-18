@@ -3,7 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/css/normalize.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/css/skeleton.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css')}}" type="text/css">
     <title>Grebel Menu</title>
+    {% block styles %}{% endblock %}
   </head>
   <body>
     {% if current_user.is_authenticated %}
@@ -14,6 +18,8 @@
     </header>
     {% endif %}
 
+    <div class="container">
     {% block body %}{% endblock %}
+    </div>
   </body>
 </html>

@@ -1,0 +1,16 @@
+@import 'globals';
+
+body {
+    background-color: #eee;
+}
+
+#login-prompt {
+    margin: 0 auto;
+    margin-top: 100px;
+    width: 300px;
+
+    padding: 16px;
+
+    background-color: #ddd;
+    @extend .z-depth-1;
+}

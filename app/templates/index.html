@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}" type="text/css">
+{% endblock styles %}
+
+{% block body %}
+<div id="calendar">
+  <p>It works!</p>
+
+  <p>Yeah this is a terrible landing page, but so what</p>
+
+  <p>Hi {{ current_user.name }}!</p>
+
+  <div>
+    <iframe src="https://calendar.google.com/calendar/embed?showTitle=0&amp;showDate=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0&amp;mode=AGENDA&amp;height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=grebelkitchen%40gmail.com&amp;color=%23182C57&amp;ctz=America%2FToronto" style="border-width:0" frameborder="0" scrolling="no"></iframe>
+  </div>
+</div>
+
+<div id="preferences">
+  <h3>Your Favourites</h3>
+  <ul>
+    {% for pref in current_user.preferences %}
+    <li>{{ pref.food }}</li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}

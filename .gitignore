@@ -8,3 +8,4 @@ __pycache__
 app.db
 *.pyc
 .secrets
+app/static/css
