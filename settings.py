@@ -8,8 +8,13 @@ SECRET_KEY = 'This is a dummy string'
 
 # Recaptcha keys - need to sign up to get them so this validates
 
-RECAPTCHA_PUBLIC_KEY = ''
-RECAPTCHA_PRIVATE_KEY = ''
+# Default to Google's testing keys
+RECAPTCHA_PUBLIC_KEY = os.environ.get(
+    'RECAPTCHA_PUBLIC_KEY',
+    '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI')
+RECAPTCHA_PRIVATE_KEY = os.environ.get(
+    'RECAPTCHA_PRIVATE_KEY',
+    '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe')
 
 # OAuth2
 GOOGLE = {
