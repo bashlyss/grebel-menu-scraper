@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}" type="text/css" media="all">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" type="text/css" media="all">
 {% endblock %}
 
 {% block body %}
@@ -9,7 +9,10 @@
   <form method="POST" action="/login">
     {{ form.csrf_token }}
     <div class="row">
-      {{ form.email.label }} {{ form.email }}
+      {{ form.email.label }} {{ with_errors(form.email) }}
+    </div>
+    <div class="row">
+      {{ form.password.label }} {{ with_errors(form.password) }}
     </div>
     <div class="row">
       <label>
@@ -17,6 +20,11 @@
       <span class="label-text">{{ form.remember.label.text }}</span>
       </label>
     </div>
+    {% if invalid_login %}
+    <ul class="errors">
+      <li>Invalid username or password</li>
+    </ul>
+    {% endif %}
     <div class="row">
     {{ form.submit(class_='button-primary') }}
     </div>

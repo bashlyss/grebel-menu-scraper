@@ -1,0 +1,12 @@
+button {
+    background-color: white;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+}
+
+.errors {
+    color: red;
+    list-style-type: none;
+}

@@ -1,7 +1,34 @@
+{% extends 'layout.html' %}
+
+{% block body %}
 <form method="POST" action="/register">
-    {{ form.csrf_token }}
-    {{ form.name.label }} {{ form.name }}
-    {{ form.email.label }} {{ form.email }}
-	{{ form.recaptcha }}
-    {{ form.submit }}
+  {{ form.csrf_token }}
+  <div class="row">
+    {{ form.name.label }} {{ with_errors(form.name) }}
+  </div>
+  <div class="row">
+    {{ form.email.label }} {{ with_errors(form.email) }}
+  </div>
+  <div class="row">
+    {{ form.password.label }} {{ with_errors(form.password) }}
+  </div>
+  <div class="row">
+    {{ form.confirm.label }} {{ with_errors(form.confirm) }}
+  </div>
+  <div class="row">
+    {{ form.recaptcha(**{
+         'class': 'g-recaptcha',
+         'data-sitekey': config['RECAPTCHA_PUBLIC_KEY']
+       })
+    }}
+    {% if form.recaptcha.errors %}
+    <ul class="errors">
+      <li>Recaptcha failed</li>
+    </ul>
+    {% endif %}
+  </div>
+  <div class="row">
+    {{ form.submit(class_='button-primary') }}
+  </div>
 </form>
+{% endblock %}

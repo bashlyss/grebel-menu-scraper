@@ -1,12 +1,8 @@
-@import 'colors';
 @import 'globals';
 
-button {
-    background-color: white;
-}
-
 header {
-    @extend .z-depth-1;
+    @include z-depth-1();
+
     height: 2.5em;
     padding: 8px;
     background-color: $teal;
