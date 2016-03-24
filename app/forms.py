@@ -26,6 +26,6 @@ class RegistrationForm(Form):
 
     confirm = PasswordField('Confirm Password', [
         validators.InputRequired(),
-        validators.EqualTo('confirm', message='Passwords must match')])
+        validators.EqualTo('password', message='Passwords must match')])
     recaptcha = RecaptchaField()
     submit = SubmitField('Sign up')
