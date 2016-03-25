@@ -4,14 +4,14 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" type="text/css">
 {% endblock styles %}
 
+{% block js %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
+
 {% block body %}
 <div id="calendar">
-  <p>It works!</p>
-
-  <p>Yeah this is a terrible landing page, but so what</p>
-
   <p>Hi {{ current_user.name }}!</p>
-
+  <p>Welcome to your personalized Grebel Menu.  Take a look at the menu below or your favourites on the right.</p>
   <div>
     <iframe src="https://calendar.google.com/calendar/embed?showTitle=0&amp;showDate=0&amp;showPrint=0&amp;showTabs=0&amp;showCalendars=0&amp;showTz=0&amp;mode=AGENDA&amp;height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=grebelkitchen%40gmail.com&amp;color=%23182C57&amp;ctz=America%2FToronto" style="border-width:0" frameborder="0" scrolling="no"></iframe>
   </div>
@@ -19,9 +19,19 @@
 
 <div id="preferences">
   <h3>Your Favourites</h3>
+  <form method="POST" action="{{ url_for('add_preference') }}">
+    {{ form.csrf_token }}
+    <div class="row">
+      {{ form.food.label }} {{ with_errors(form.food) }}
+    </div>
+    {{ form.submit(class_='button-primary') }}
+  </form>
   <ul>
     {% for pref in current_user.preferences %}
-    <li>{{ pref.food }}</li>
+    <li class="preference" data-id="{{ pref.id }}">
+      <span>{{ pref.food }}</span>
+      <button class="delete u-pull-right link">X</button>
+    </li>
     {% endfor %}
   </ul>
 </div>

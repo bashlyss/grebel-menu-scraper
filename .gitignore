@@ -7,5 +7,7 @@ pip-selfcheck.json
 __pycache__
 app.db
 *.pyc
+*.swp
 .secrets
 app/static/css
+node_modules/

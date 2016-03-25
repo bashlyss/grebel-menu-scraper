@@ -6,6 +6,11 @@ header {
     height: 2.5em;
     padding: 8px;
     background-color: $teal;
+    > h1 {
+        color: $red;
+        display: inline-block;
+        font-size: 2em;
+    }
 
     > form {
         float: right;
@@ -17,4 +22,12 @@ header {
     display: flex;
     align-items: top;
     justify-content: center;
+}
+
+button.link {
+    border: none;
+    padding: 0;
+    height: initial;
+    line-height: initial;
+    font-size: 16px;
 }
