@@ -10,3 +10,6 @@ styles:
 .PHONY : watch
 watch: SCSS_FLAGS += -w
 watch: styles
+
+install: 
+	./install.sh

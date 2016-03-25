@@ -5,8 +5,9 @@ virtualenv -p $(which python3) .
 . bin/activate
 
 pip3 install -r requirements.txt
+npm install
 
-python -c "from app import db, models; db.create_all()"
+python -c "from app import sa, models; sa.create_all()"
 # Any further steps we want in the future
 # - directory for output files
 # - email/phone number for alerts once implemented, etc
