@@ -23,14 +23,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='lib/css/skeleton.css')}}" type="text/css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/globals.css')}}" type="text/css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css')}}" type="text/css">
-    <script type="text/javascript" src="{{ url_for('static', filename='js/third-party/jquery-latest.min.js')}}"></script>
     <title>Grebel Menu</title>
     {% block styles %}{% endblock %}
-    {% block js %}{% endblock %}
   </head>
   <body>
     {% if current_user.is_authenticated %}
     <header>
+      <h1>My Grebel Menu</h1>
       <form method="POST" action="{{ url_for('logout') }}">
         <button type="submit">Log out</button>
       </form>
@@ -40,5 +39,7 @@
     <div class="container">
     {% block body %}{% endblock %}
     </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/third-party/jquery-latest.min.js')}}"></script>
+    {% block js %}{% endblock %}
   </body>
 </html>

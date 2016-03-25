@@ -65,7 +65,7 @@ def index():
         form=forms.FoodPreferenceForm(),
         preferences=preferences)
 
-@app.route('/preference/delete/<int:pref_id>', methods=['DELETE'])
+@app.route('/preferences/<int:pref_id>', methods=['DELETE'])
 @login_required
 def delete_preference(pref_id):
     preference = db.get_preference_by_id(pref_id=pref_id)
@@ -74,7 +74,7 @@ def delete_preference(pref_id):
     db.delete_preference(preference)
     return flask.jsonify(success=True)
 
-@app.route('/preference/add', methods=['POST'])
+@app.route('/preferences', methods=['POST'])
 @login_required
 def add_preference():
     form = forms.FoodPreferenceForm()
