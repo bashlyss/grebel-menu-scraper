@@ -2,7 +2,7 @@ import flask
 from flask import redirect, url_for
 from flask.ext.login import login_required, login_user, current_user
 
-from app import app, writer, db, forms
+from app import app, writer, db, forms, utils
 # Import auth to register the routes
 # pylint disable=unused-import
 from app import auth
@@ -63,7 +63,8 @@ def index():
     return flask.render_template(
         'index.html',
         form=forms.FoodPreferenceForm(),
-        preferences=preferences)
+        preferences=preferences,
+        upcoming=[details[2].lower() for details in utils.get_upcoming_meals_for_user(current_user)])
 
 @app.route('/preferences/<int:pref_id>', methods=['DELETE'])
 @login_required
