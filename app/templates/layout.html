@@ -23,8 +23,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='lib/css/skeleton.css')}}" type="text/css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/globals.css')}}" type="text/css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css')}}" type="text/css">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/third-party/jquery-latest.min.js')}}"></script>
     <title>Grebel Menu</title>
     {% block styles %}{% endblock %}
+    {% block js %}{% endblock %}
   </head>
   <body>
     {% if current_user.is_authenticated %}

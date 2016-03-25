@@ -29,3 +29,9 @@ class RegistrationForm(Form):
         validators.EqualTo('password', message='Passwords must match')])
     recaptcha = RecaptchaField()
     submit = SubmitField('Sign up')
+
+class FoodPreferenceForm(Form):
+    food = StringField('Meal', [
+        validators.InputRequired(),
+        validators.Length(max=80)])
+    submit = SubmitField('Add Favourite Meal')

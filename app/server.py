@@ -59,7 +59,31 @@ def register():
 @app.route('/')
 @login_required
 def index():
-    return flask.render_template('index.html')
+    preferences = db.get_preferences_by_userid(current_user.id)
+    return flask.render_template(
+        'index.html',
+        form=forms.FoodPreferenceForm(),
+        preferences=preferences)
+
+@app.route('/preference/delete/<int:pref_id>', methods=['DELETE'])
+@login_required
+def delete_preference(pref_id):
+    preference = db.get_preference_by_id(pref_id=pref_id)
+    if preference is None:
+        return flask.jsonify(success=True)
+    db.delete_preference(preference)
+    return flask.jsonify(success=True)
+
+@app.route('/preference/add', methods=['POST'])
+@login_required
+def add_preference():
+    form = forms.FoodPreferenceForm()
+
+    if form.submit.data and form.validate():
+        preference = db.add_preference(
+            food=form.food.data,
+            user_id=current_user.id)
+    return redirect(url_for('index'))
 
 def set_calendar_headers(resp):
     if resp.headers['Content-Type'].startswith('text/calendar'):
