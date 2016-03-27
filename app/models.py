@@ -18,7 +18,7 @@ class User(sa.Model, UserMixin):
     def __init__(self, **kwargs):
         # salt is automatically generated when it is unspecified
         pw_hash = ""
-        if 'password' in kwargs
+        if 'password' in kwargs:
             pw_hash = crypt(kwargs.pop('password'))
         kwargs['pw_hash'] = pw_hash
         super(User, self).__init__(**kwargs)
