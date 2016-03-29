@@ -80,11 +80,12 @@ def delete_preference(pref_id):
 def add_preference():
     form = forms.FoodPreferenceForm()
 
-    if form.submit.data and form.validate():
+    if form.is_submitted() and form.validate():
         preference = db.add_preference(
             food=form.food.data,
             user_id=current_user.id)
-    return redirect(url_for('index'))
+        return flask.jsonify(success=True, food=preference.food, id=preference.id)
+    return flask.jsonify(success=False)
 
 def set_calendar_headers(resp):
     if resp.headers['Content-Type'].startswith('text/calendar'):
