@@ -19,7 +19,7 @@
 
 <div id="preferences">
   <h3>Your Favourites</h3>
-  <form method="POST" action="{{ url_for('add_preference') }}">
+  <form id="add-preference-form" method="POST" action="{{ url_for('add_preference') }}">
     {{ form.csrf_token }}
     <div class="row">
       {{ form.food.label }} {{ with_errors(form.food) }}

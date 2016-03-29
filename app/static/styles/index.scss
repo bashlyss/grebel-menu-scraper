@@ -18,16 +18,16 @@ input[type="submit"] {
     width: 30%;
     .preference {
         list-style: none;
-        padding-top: 1em;
-        border-top: 1px solid $teal;
-        &:last-child {
-            border-bottom: 1px solid $teal;
-            padding-bottom: 1em;
-        }
+        padding: 1em 0;
+        margin: 0;
         .delete {
             color: $red;
+            display: none;
             text-decoration: none;
             margin-right: 1em;
+        }
+        &:hover .delete {
+            display: inherit;
         }
     }
 }
