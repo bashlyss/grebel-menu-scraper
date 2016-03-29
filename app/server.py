@@ -64,7 +64,7 @@ def index():
         'index.html',
         form=forms.FoodPreferenceForm(),
         preferences=preferences,
-        upcoming=[details[2].lower() for details in utils.get_upcoming_meals_for_user(current_user)])
+        upcoming=[details.food.lower() for details in utils.get_upcoming_meals_for_user(current_user)])
 
 @app.route('/preferences/<int:pref_id>', methods=['DELETE'])
 @login_required
