@@ -29,7 +29,7 @@
   <ul>
     {% for pref in current_user.preferences %}
     <li class="preference" data-id="{{ pref.id }}">
-      <span>{{ pref.food }}</span>
+      <span {% if pref.food.lower() in upcoming %}class="bold"{% endif %}>{{ pref.food }}</span>
       <button class="delete u-pull-right link">X</button>
     </li>
     {% endfor %}
