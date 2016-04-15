@@ -80,7 +80,7 @@ def add_preference():
     form = forms.FoodPreferenceForm()
 
     if form.submit.data and form.validate():
-        preference = db.add_preference(
+        db.add_preference(
             food=form.food.data,
             user_id=current_user.id)
     return redirect(url_for('index'))

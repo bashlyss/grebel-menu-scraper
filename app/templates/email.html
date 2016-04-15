@@ -1,0 +1,7 @@
+<h1>Hi {{ user.name }},</h1>
+<p>You have {{ favs|count }} favourite {{ meal_text }} coming up this week.</p>
+<ul>
+  {% for fav in favs %}
+  <li>{{ fav['day'] }}: {{ fav['meal'] }}</li>
+  {% endfor %}
+</ul>

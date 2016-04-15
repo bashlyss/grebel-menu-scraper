@@ -15,6 +15,8 @@ class User(sa.Model, UserMixin):
 
     preferences = sa.relationship("FoodPreference", backref="user")
 
+    subscribed = sa.Column(sa.Boolean, default=True)
+
     def __init__(self, **kwargs):
         # salt is automatically generated when it is unspecified
         pw_hash = crypt(kwargs.pop('password'))
