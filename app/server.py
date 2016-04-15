@@ -2,7 +2,7 @@ import flask
 from flask import redirect, url_for
 from flask.ext.login import login_required, login_user, current_user
 
-from app import app, writer, db, forms
+from app import app, writer, db, forms, utils
 # Import auth to register the routes
 # pylint disable=unused-import
 from app import auth
@@ -63,7 +63,8 @@ def index():
     return flask.render_template(
         'index.html',
         form=forms.FoodPreferenceForm(),
-        preferences=preferences)
+        preferences=preferences,
+        upcoming=[details.food.lower() for details in utils.get_upcoming_meals_for_user(current_user)])
 
 @app.route('/preferences/<int:pref_id>', methods=['DELETE'])
 @login_required
@@ -79,11 +80,12 @@ def delete_preference(pref_id):
 def add_preference():
     form = forms.FoodPreferenceForm()
 
-    if form.submit.data and form.validate():
-        db.add_preference(
+    if form.is_submitted() and form.validate():
+        preference = db.add_preference(
             food=form.food.data,
             user_id=current_user.id)
-    return redirect(url_for('index'))
+        return flask.jsonify(success=True, food=preference.food, id=preference.id)
+    return flask.jsonify(success=False)
 
 def set_calendar_headers(resp):
     if resp.headers['Content-Type'].startswith('text/calendar'):
