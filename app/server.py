@@ -1,6 +1,8 @@
 import flask
 from flask import redirect, url_for
 from flask.ext.login import login_required, login_user, current_user
+from icalendar import Event
+from icalendar.prop import vDDDTypes
 
 from app import app, writer, db, forms, utils
 # Import auth to register the routes
@@ -86,6 +88,24 @@ def add_preference():
             user_id=current_user.id)
         return flask.jsonify(success=True, food=preference.food, id=preference.id)
     return flask.jsonify(success=False)
+
+@app.route('/calendar.json')
+def calendar_json():
+    cal = writer.get_calendar()
+    events = []
+    for event in cal.subcomponents:
+        if not isinstance(event, Event):
+            continue
+
+        events.append({
+            'id': event['uid'],
+            'title': event['summary'],
+            'start': vDDDTypes.from_ical(event['dtstart']).isoformat(),
+            'end': vDDDTypes.from_ical(event['dtend']).isoformat(),
+        })
+
+    return flask.Response(flask.json.dumps(events), content_type='application/json')
+
 
 def set_calendar_headers(resp):
     if resp.headers['Content-Type'].startswith('text/calendar'):
