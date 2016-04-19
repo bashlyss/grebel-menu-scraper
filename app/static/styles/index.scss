@@ -1,10 +1,19 @@
 @import 'globals';
 
-#calendar {
+.fc-button {
+    line-height: initial;
+    border-radius: 0px;
+}
+
+.fc-center {
+    margin-top: 32px;
+}
+
+#calendar-container {
     width: 60%;
     margin-right: 10%;
 
-    iframe {
+    #calendar {
         width: 100%;
         height: 600px;
     }
