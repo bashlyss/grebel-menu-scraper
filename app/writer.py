@@ -9,6 +9,10 @@ from .scraper import menu
 
 STATIC_DIR = path.join(path.dirname(__file__), 'static')
 
+MENU_FILE = 'menu.ics'
+VEG_MENU_FILE = 'veg_menu.ics'
+SNACK_MENU_FILE = 'snack_menu.ics'
+
 
 class UUIDMaker(object):
     """
@@ -25,7 +29,7 @@ class UUIDMaker(object):
         return uid
 
 
-def get_calendar(fname, title, uuid_maker):
+def get_calendar_file(fname, title, uuid_maker):
     """ Either get the calendar file `fname` or create it """
     cal_path = path.join(STATIC_DIR, fname)
     if path.exists(cal_path):
@@ -44,6 +48,24 @@ def write_calendar(fname, cal):
 
     with open(cal_path, 'wb') as cal_file:
         cal_file.write(cal.to_ical(True))
+
+def get_calendar(uuid_maker=None):
+    MENU_FILE = 'menu.ics'
+    if uuid_maker is None:
+        uuid_maker = UUIDMaker()
+    return get_calendar_file(MENU_FILE, 'Grebel Weekly Menu', uuid_maker)
+
+def get_veg_calendar(uuid_maker=None):
+    VEG_MENU_FILE = 'veg_menu.ics'
+    if uuid_maker is None:
+        uuid_maker = UUIDMaker()
+    return get_calendar_file(VEG_MENU_FILE, 'Grebel Weekly Vegetarian Menu', uuid_maker)
+
+def get_snack_calendar(uuid_maker=None):
+    SNACK_MENU_FILE = 'snack_menu.ics'
+    if uuid_maker is None:
+        uuid_maker = UUIDMaker()
+    return get_calendar_file(SNACK_MENU_FILE, 'Grebel Weekly Snack Menu', uuid_maker)
 
 def make_datetime(date_part, time_part):
     time_part = time_part.replace(tzinfo=timezone('America/New_York'))
@@ -80,13 +102,9 @@ def update_calendars():
 
     uuid_maker = UUIDMaker()
 
-    MENU_FILE = 'menu.ics'
-    VEG_MENU_FILE = 'veg_menu.ics'
-    SNACK_MENU_FILE = 'snack_menu.ics'
-
-    cal = get_calendar(MENU_FILE, 'Grebel Weekly Menu', uuid_maker)
-    veg_cal = get_calendar(VEG_MENU_FILE, 'Grebel Weekly Vegetarian Menu', uuid_maker)
-    snack_cal = get_calendar(SNACK_MENU_FILE, 'Grebel Weekly Snack Menu', uuid_maker)
+    cal = get_calendar(uuid_maker)
+    veg_cal = get_veg_calendar(uuid_maker)
+    snack_cal = get_snack_calendar(uuid_maker)
 
     sorted_menu_keys = sorted(menu.keys())
     menu_start = make_datetime(sorted_menu_keys[0], time(0, 0, 0))

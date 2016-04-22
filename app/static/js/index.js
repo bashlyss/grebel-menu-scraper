@@ -21,4 +21,17 @@ $(document).ready(function () {
         });
         event.preventDefault();
     });
+
+    $.get('/calendar.json', function(data) {
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'agendaWeek,agendaDay'
+            },
+            defaultView: 'agendaDay',
+            events: data,
+            eventColor: 'red',
+        });
+    });
 });
