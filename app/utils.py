@@ -8,7 +8,9 @@ UpcomingMeal = namedtuple('UpcomingMeal', 'day meal food')
 def get_upcoming_meals(days=7):
     upcoming = []
     for day in [date.today() + timedelta(d) for d in range(days)]:
-        upcoming.append(convert_daily_to_dict(menu[day]))
+        daily_menu = menu.get(day)
+        if daily_menu is not None:
+            upcoming.append(convert_daily_to_dict(daily_menu))
     return upcoming
 
 def get_upcoming_meals_for_user(user, days=7):
