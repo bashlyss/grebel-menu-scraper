@@ -2,6 +2,6 @@
 <p>You have {{ favs|count }} favourite {{ meal_text }} coming up this week.</p>
 <ul>
   {% for fav in favs %}
-  <li>{{ fav['day'] }}: {{ fav['meal'] }}</li>
+  <li>{{ fav['day'] }} at {{ fav['meal'] }}: {{ fav['food'] }}</li>
   {% endfor %}
 </ul>

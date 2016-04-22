@@ -4,7 +4,7 @@ import logging
 from flask import render_template
 import sendgrid
 
-from app import app, sa
+from app import app, sa, utils
 from app.models import User
 
 logger = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ sg_api = sendgrid.SendGridAPIClient(apikey=app.config['SENDGRID_CLIENT_SECRET'])
 
 def notify_users(menu):
     for user in User.query.all():
-        favs = _get_favs_for_week(user, menu)
+        favs = utils.get_upcoming_meals_for_user(user)
         if not favs:
             return
 
@@ -34,13 +34,6 @@ def notify_users(menu):
         status, msg = sg.send(message)
 
         logger.info('Send email with status %s containing %s', status, msg)
-
-def _get_favs_for_week(user, menu):
-    # TODO unimplemented
-    return [{
-        'day': 'Monday',
-        'meal': 'Pesto Mozzerella Grilled Cheese',
-    }]
 
 def get_unsubscribes():
     resp = sg_api.client.asm.groups._(app.config['ALL_EMAILS_GROUP']).suppressions.get()
