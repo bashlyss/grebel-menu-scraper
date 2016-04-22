@@ -1,0 +1,3 @@
+# m h  dom mon dow command
+0 3 * * 0 cd /var/www/grebel-menu-scraper; python -c 'import app.tasks; app.run_weekly()'
+0 3 * * * cd /var/www/grebel-menu-scraper; python -c 'import app.tasks; app.run_daily()'
